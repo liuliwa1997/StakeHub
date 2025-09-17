@@ -1,0 +1,17 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract StakeHub {
+    mapping(address => uint256) public stakes;
+
+    function stake() external payable {
+        require(msg.value > 0, "Need ETH to stake");
+        stakes[msg.sender] += msg.value;
+    }
+
+    function unstake(uint256 amount) external {
+        require(stakes[msg.sender] >= amount, "Not enough stake");
+        stakes[msg.sender] -= amount;
+        payable(msg.sender).transfer(amount);
+    }
+}
